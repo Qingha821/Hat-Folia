@@ -97,19 +97,18 @@ public class Hat extends JavaPlugin{
     }
 
     private void registerPermissions(){
-        //Permission basePerm = new Permission("hat.*", PermissionDefault.OP);
-        Permission blockPerm = new Permission("hat.blocks", PermissionDefault.OP); //Change these to OP if * permission removed
-        Permission itemPerm = new Permission("hat.items", PermissionDefault.OP); //^^
+        Permission basePerm = new Permission("hat.*", PermissionDefault.OP);
+        Permission blockPerm = new Permission("hat.blocks", PermissionDefault.FALSE); //Change these to OP if * permission removed
+        Permission itemPerm = new Permission("hat.items", PermissionDefault.FALSE); //^^
 
-        //blockPerm.addParent(basePerm, true);
-        //itemPerm.addParent(basePerm, true);
+        blockPerm.addParent(basePerm, true);
+        itemPerm.addParent(basePerm, true);
 
         Material[] materials = Material.values();
 
         for(Material mat : materials){
             //TODO: rename all references of .name() to .toString() if it seems like a good idea
             Permission perm = new Permission("hat." + mat.name(), PermissionDefault.FALSE);
-            //Bukkit.getPluginManager().addPermission(perm);
 
             //Make these children of the appropriate permission
             if(mat.isBlock()){
@@ -117,13 +116,15 @@ public class Hat extends JavaPlugin{
             }else{
                 perm.addParent(itemPerm, true);
             }
+
+            Bukkit.getPluginManager().addPermission(perm);
         }
 
-        //Bukkit.getPluginManager().addPermission(basePerm);
+        Bukkit.getPluginManager().addPermission(basePerm);
         Bukkit.getPluginManager().addPermission(blockPerm);
         Bukkit.getPluginManager().addPermission(itemPerm);
 
-        //Bukkit.getConsoleSender().sendMessage("basePerm Children: " + basePerm.getChildren().toString());
+        Bukkit.getConsoleSender().sendMessage("basePerm Children: " + basePerm.getChildren().toString());
         Bukkit.getConsoleSender().sendMessage("blockPerm Children: " + blockPerm.getChildren().toString());
         Bukkit.getConsoleSender().sendMessage("itemPerm Children: " + itemPerm.getChildren().toString());
     }

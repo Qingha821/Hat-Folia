@@ -1,13 +1,11 @@
 package net.woek.Hat;
 //TODO: Change package name to com.sigong.Hat
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,8 +15,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.UUID;
 
 public class HatHandler implements CommandExecutor, Listener {
 
@@ -89,24 +85,6 @@ public class HatHandler implements CommandExecutor, Listener {
     //  wouldn't normally be put into the helmet slot (this prevents checking permissions for helmets, pumpkin, etc)
     @EventHandler
     public void onClickInHelmetSlot(InventoryClickEvent event){
-        /*if(event.getInventory().getType() == InventoryType.CRAFTING &&
-                event.getSlotType() == InventoryType.SlotType.ARMOR &&
-                event.getRawSlot() == 5 &&
-                event.getWhoClicked().getItemOnCursor().getType() != Material.AIR){ //This lets players remove hats without a permission check
-            //TODO Re-enable this and remove the below if statement if there's a wearable item that doesn't work as it does by default
-            //new clickCheckRunnable(event.getWhoClicked().getItemOnCursor().clone(), event.getWhoClicked().getUniqueId()).runTaskLater(instance,1L); //check if the items switched after a tick
-            if(event.getWhoClicked().getItemOnCursor().getType().getEquipmentSlot() != EquipmentSlot.HEAD){ //check that the item is supposed to go in the head slot by default
-                Player player = (Player) event.getWhoClicked();
-                ItemStack cursorItem = player.getItemOnCursor();
-                if(checkValidHat(player, cursorItem)){
-                    player.setItemOnCursor(player.getInventory().getHelmet());
-                    player.updateInventory();
-                    player.getInventory().setHelmet(cursorItem);
-                    player.updateInventory();
-                    player.sendMessage(setMessage);
-                }
-            }
-        }*/
         if(event.getInventory().getType() == InventoryType.CRAFTING &&
                 event.getRawSlot() == 5 &&
                 event.getWhoClicked().getItemOnCursor().getType() != Material.AIR &&
@@ -143,50 +121,11 @@ public class HatHandler implements CommandExecutor, Listener {
 
         @Override
         public void run() {
-            /*player.setItemOnCursor(player.getInventory().getHelmet());
-            player.updateInventory();
-            player.getInventory().setHelmet(cursorItem);
-            player.updateInventory();
-            player.sendMessage(setMessage);*/
-
             player.setItemOnCursor(hatItem);
             player.getInventory().setHelmet(cursorItem);
             if(messagesEnabled){player.sendMessage(setMessage);}
         }
     }
-
-    //Checks to see if the item on the cursor and the item in the helmet slot before an inventory click event involving
-    //  the helmet slot switched places after the event. If not, it checks permissions and switches them if the player
-    //  has permission to wear that item as a hat.
-    /*TODO: There's a scenario where if a player lags, clicks a hat into the helmet slot which already contains an item and then closes their inventory, the helmet slot item could be lost
-    *  I don't know how to test lag though so we'll see if it's a problem irl*/
-    /*private class clickCheckRunnable extends BukkitRunnable {
-
-        public clickCheckRunnable(ItemStack beforeCursorItem, UUID playerUUID){
-            this.beforeCursorItem = beforeCursorItem;
-            this.playerUUID = playerUUID;
-        }
-
-        private final ItemStack beforeCursorItem; //Item that was on the cursor before the event occured
-        private final UUID playerUUID;
-
-        @Override
-        public void run() {
-            Player player = Bukkit.getPlayer(playerUUID);
-
-            ItemStack afterCursorItem = player.getItemOnCursor(); //Will be air if nothing on cursor
-
-            //If cursor item is the same before and after the click occurs (it won't be air, this is prevented before getting to this point) //TODO: figure out if that's the best place to prevent it
-            if(beforeCursorItem.getType() == afterCursorItem.getType()){
-                if(checkValidHat(player, afterCursorItem)){
-                    player.setItemOnCursor(player.getInventory().getHelmet());
-                    player.getInventory().setHelmet(afterCursorItem);
-                    player.updateInventory();
-                    player.sendMessage(setMessage);
-                }
-            }
-        }
-    }*/
 
     //Checks hat conditions (permission and itemstack) for both the command and manual placement
     //Returns true if the hat is valid (1 item) and the player has permission to wear it

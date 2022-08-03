@@ -6,4 +6,8 @@
   - Allowed the /hat command to be run while holding air to remove the current hat.
 
 1.4.4
-  - Allowed messages to be disabled by a boolean in messages.yml (except for the console message when using /hat)
+  - Allowed messages to be disabled by a boolean in messages.yml (except for the console message when using /
+
+1.5.0
+  - Changed how permissions are handled to make them show up in tab-complete of permissions plugins
+  - Dynamically registered permissions based on materials enum
