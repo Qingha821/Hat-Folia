@@ -48,24 +48,6 @@ public class HatHandler implements CommandExecutor, Listener {
             ItemStack held = inv.getItemInMainHand();
             ItemStack helm = inv.getHelmet();
 
-            //checks for permissions
-            //debug start
-//            Bukkit.getConsoleSender().sendMessage("---------------------------------------");
-//            Bukkit.getConsoleSender().sendMessage("BEGIN HAT DEBUG");
-//            Bukkit.getConsoleSender().sendMessage("Player: " + player.getName());
-//            Bukkit.getConsoleSender().sendMessage("Material: " + held.getType());
-//            Bukkit.getConsoleSender().sendMessage("No Negative Permission: " + !sender.hasPermission("-hat." + held.getType().name()));
-//            Bukkit.getConsoleSender().sendMessage("Sender is an OP: " + player.isOp());
-//            Bukkit.getConsoleSender().sendMessage("Universal Permission: " + player.hasPermission("hat.*"));
-//            Bukkit.getConsoleSender().sendMessage("Specific Permission: " + player.hasPermission("hat." + held.getType().name()));
-//            Bukkit.getConsoleSender().sendMessage("Block Permission: " + player.hasPermission("hat.blocks"));
-//            Bukkit.getConsoleSender().sendMessage("Item Permission: " + player.hasPermission("hat.items"));
-//            Bukkit.getConsoleSender().sendMessage("Held Item is Block: " + held.getType().isBlock());
-//            Bukkit.getConsoleSender().sendMessage("Held Item is Item: " + !held.getType().isBlock());
-//            Bukkit.getConsoleSender().sendMessage("END HAT DEBUG");
-//            Bukkit.getConsoleSender().sendMessage("---------------------------------------");
-            //debug end
-
             //If the hat is valid and the player has permission to wear it
             if(checkValidHat(player, held)){
                 //player.sendMessage("Best slot: " + held.getType().getEquipmentSlot());//TODO REMOVE

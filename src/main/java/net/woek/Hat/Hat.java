@@ -123,9 +123,5 @@ public class Hat extends JavaPlugin{
 
             Bukkit.getPluginManager().addPermission(perm);
         }
-
-        //Bukkit.getConsoleSender().sendMessage("basePerm Children: " + basePerm.getChildren().toString());
-        //Bukkit.getConsoleSender().sendMessage("blockPerm Children: " + blockPerm.getChildren().toString());
-        //Bukkit.getConsoleSender().sendMessage("itemPerm Children: " + itemPerm.getChildren().toString());
     }
 }
