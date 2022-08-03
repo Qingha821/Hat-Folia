@@ -98,11 +98,15 @@ public class Hat extends JavaPlugin{
 
     private void registerPermissions(){
         Permission basePerm = new Permission("hat.*", PermissionDefault.OP);
-        Permission blockPerm = new Permission("hat.blocks", PermissionDefault.FALSE); //Change these to OP if * permission removed
-        Permission itemPerm = new Permission("hat.items", PermissionDefault.FALSE); //^^
+        Bukkit.getPluginManager().addPermission(basePerm);
 
+        Permission blockPerm = new Permission("hat.blocks", PermissionDefault.FALSE); //Change these to OP if * permission removed
         blockPerm.addParent(basePerm, true);
+        Bukkit.getPluginManager().addPermission(blockPerm);
+
+        Permission itemPerm = new Permission("hat.items", PermissionDefault.FALSE); //^^
         itemPerm.addParent(basePerm, true);
+        Bukkit.getPluginManager().addPermission(itemPerm);
 
         Material[] materials = Material.values();
 
@@ -120,12 +124,8 @@ public class Hat extends JavaPlugin{
             Bukkit.getPluginManager().addPermission(perm);
         }
 
-        Bukkit.getPluginManager().addPermission(basePerm);
-        Bukkit.getPluginManager().addPermission(blockPerm);
-        Bukkit.getPluginManager().addPermission(itemPerm);
-
-        Bukkit.getConsoleSender().sendMessage("basePerm Children: " + basePerm.getChildren().toString());
-        Bukkit.getConsoleSender().sendMessage("blockPerm Children: " + blockPerm.getChildren().toString());
-        Bukkit.getConsoleSender().sendMessage("itemPerm Children: " + itemPerm.getChildren().toString());
+        //Bukkit.getConsoleSender().sendMessage("basePerm Children: " + basePerm.getChildren().toString());
+        //Bukkit.getConsoleSender().sendMessage("blockPerm Children: " + blockPerm.getChildren().toString());
+        //Bukkit.getConsoleSender().sendMessage("itemPerm Children: " + itemPerm.getChildren().toString());
     }
 }
