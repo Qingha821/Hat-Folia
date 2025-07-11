@@ -15,6 +15,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 public class HatHandler implements CommandExecutor, Listener {
 
@@ -39,7 +40,7 @@ public class HatHandler implements CommandExecutor, Listener {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         //Checks if sender is a player
         if(sender instanceof Player){
             Player player = (Player) sender;
@@ -114,7 +115,7 @@ public class HatHandler implements CommandExecutor, Listener {
     //Returns false otherwise
     private boolean checkValidHat(Player player, ItemStack held){
         PlayerInventory inv = player.getInventory();
-        ItemStack helm = inv.getHelmet();
+        inv.getHelmet();
 //        if(player.isOp() || //If player is op, they get all the hats
 //                player.hasPermission("hat." + held.getType().name()) || //If player has the specific permission, or if they have hat.* and the specific permission isn't false
 //                (!player.isPermissionSet("hat." + held.getType().name()) && //If the specific permission isn't set, that means it isn't false

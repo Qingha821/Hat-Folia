@@ -14,29 +14,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class Hat extends JavaPlugin{
+public class Hat extends JavaPlugin {
+
+    private boolean isFolia = false;
 
     //on enable
     @Override
     public void onEnable() {
-        YamlConfiguration messages = validateYaml("messages.yml");
-        //YamlConfiguration config = validateYaml("config.yml"); //TODO: Re-enable this if anyone wants it
+        // Detect Folia
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            isFolia = true;
+            getLogger().info("Detected Folia server implementation");
+        } catch (ClassNotFoundException e) {
+            isFolia = false;
+        }
 
+        YamlConfiguration messages = validateYaml();
         boolean enabled = messages.getBoolean("messages-enabled");
         String set = (String) messages.get("set");
         String stacksize = (String) messages.get("stack-size");
         String nopermission = (String) messages.get("no-permission");
         String console = (String) messages.get("console");
 
-        //TODO: Make sure this works
         registerPermissions();
 
-        HatHandler handler = new HatHandler(this,enabled,set,stacksize,nopermission,console);
+        HatHandler handler = new HatHandler(this, enabled, set, stacksize, nopermission, console);
 
         this.getCommand("hat").setExecutor(handler);
-        //if(config.getBoolean("manual_hat_equip.enabled")){
-            this.getServer().getPluginManager().registerEvents(handler, this);
-        //}
+        this.getServer().getPluginManager().registerEvents(handler, this);
 
         Bukkit.getConsoleSender().sendMessage("[Hat] Hat has been enabled.");
     }
@@ -47,77 +53,74 @@ public class Hat extends JavaPlugin{
         Bukkit.getConsoleSender().sendMessage("[Hat] Hat has been disabled.");
     }
 
-    private YamlConfiguration validateYaml(String filename) {
-        Bukkit.getConsoleSender().sendMessage("[" + this.getName() + "] Validating " + filename);
+    public boolean isFolia() {
+        return isFolia;
+    }
 
-        //default config from jar
-        InputStream defaultFile = this.getResource(filename);
+    private YamlConfiguration validateYaml() {
+        Bukkit.getConsoleSender().sendMessage("[" + this.getName() + "] Validating " + "messages.yml");
+
+        InputStream defaultFile = this.getResource("messages.yml");
+        assert defaultFile != null;
         BufferedReader reader = new BufferedReader(new InputStreamReader(defaultFile));
         YamlConfiguration newconfig = YamlConfiguration.loadConfiguration(reader);
 
-        //config from plugin's folder on server
         YamlConfiguration oldconfig = new YamlConfiguration();
         try {
-            File config = new File(getDataFolder(), filename);
+            File config = new File(getDataFolder(), "messages.yml");
             if(config.exists()) {
                 oldconfig.load(config);
-            }else{
-                Bukkit.getConsoleSender().sendMessage("[" + this.getName() + "] " + filename + " does not exist, creating it now.");
+            } else {
+                Bukkit.getConsoleSender().sendMessage("[" + this.getName() + "] " + "messages.yml" + " does not exist, creating it now.");
             }
-        }catch(Throwable e){
-            Bukkit.getConsoleSender().sendMessage("[" + this.getName() + "] " + filename + " does not contain a valid configuration, the default configuration will be used instead.");
+        } catch(Throwable e) {
+            Bukkit.getConsoleSender().sendMessage("[" + this.getName() + "] " + "messages.yml" + " does not contain a valid configuration, the default configuration will be used instead.");
             return newconfig;
         }
 
-        //TODO: See if anything else needs to be closed.
-        //closes the reader
         try {
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //save the value of each key in oldconfig that's also in newconfig to newconfig
         for(String key : oldconfig.getKeys(true)) {
             if(newconfig.contains(key) && !(oldconfig.get(key) instanceof ConfigurationSection)){
                 newconfig.set(key, oldconfig.get(key));
             }
         }
 
-        //saves new configuration file to plugin folder
         try {
-            newconfig.save(new File(this.getDataFolder(), filename));
+            newconfig.save(new File(this.getDataFolder(), "messages.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Bukkit.getConsoleSender().sendMessage("[" + this.getName() + "] " + filename + " has been validated.");
+        Bukkit.getConsoleSender().sendMessage("[" + this.getName() + "] " + "messages.yml" + " has been validated.");
 
         return newconfig;
     }
 
-    private void registerPermissions(){
+    private void registerPermissions() {
         Permission basePerm = new Permission("hat.*", PermissionDefault.OP);
         Bukkit.getPluginManager().addPermission(basePerm);
 
-        Permission blockPerm = new Permission("hat.blocks", PermissionDefault.FALSE); //Change these to OP if * permission removed
+        Permission blockPerm = new Permission("hat.blocks", PermissionDefault.FALSE);
         blockPerm.addParent(basePerm, true);
         Bukkit.getPluginManager().addPermission(blockPerm);
 
-        Permission itemPerm = new Permission("hat.items", PermissionDefault.FALSE); //^^
+        Permission itemPerm = new Permission("hat.items", PermissionDefault.FALSE);
         itemPerm.addParent(basePerm, true);
         Bukkit.getPluginManager().addPermission(itemPerm);
 
         Material[] materials = Material.values();
 
-        for(Material mat : materials){
-            //TODO: rename all references of .name() to .toString() if it seems like a good idea
+        for(Material mat : materials) {
             Permission perm = new Permission("hat." + mat.name(), PermissionDefault.FALSE);
 
-            //Make these children of the appropriate permission
-            if(mat.isBlock()){
+            if(mat.isBlock()) {
                 perm.addParent(blockPerm, true);
-            }else{
+            } else {
                 perm.addParent(itemPerm, true);
             }
 

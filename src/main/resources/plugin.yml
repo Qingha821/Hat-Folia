@@ -1,8 +1,9 @@
 name: Hat
 version: ${project.version}
 main: net.woek.Hat.Hat
-api-version: 1.13
+api-version: 1.21
+folia-supported: true
 commands:
   hat:
-    description: Sets the currently held item as your hat.
+    description: Возможность одеть предметы и блоки на голову.
     usage: /hat
