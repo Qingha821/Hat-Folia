@@ -1,0 +1,9 @@
+name: Hat
+version: 1.5.0
+main: net.woek.Hat.Hat
+api-version: 1.21
+folia-supported: true
+commands:
+  hat:
+    description: Возможность одеть предметы и блоки на голову.
+    usage: /hat

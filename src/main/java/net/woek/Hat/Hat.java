@@ -18,7 +18,6 @@ public class Hat extends JavaPlugin {
 
     private boolean isFolia = false;
 
-    //on enable
     @Override
     public void onEnable() {
         // Detect Folia
@@ -44,13 +43,12 @@ public class Hat extends JavaPlugin {
         this.getCommand("hat").setExecutor(handler);
         this.getServer().getPluginManager().registerEvents(handler, this);
 
-        Bukkit.getConsoleSender().sendMessage("[Hat] Hat has been enabled.");
+        Bukkit.getConsoleSender().sendMessage("Hat has been enabled.");
     }
 
-    //on disable
     @Override
     public void onDisable() {
-        Bukkit.getConsoleSender().sendMessage("[Hat] Hat has been disabled.");
+        Bukkit.getConsoleSender().sendMessage("Hat has been disabled.");
     }
 
     public boolean isFolia() {
